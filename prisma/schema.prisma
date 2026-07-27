@@ -1,0 +1,236 @@
+// ============================================================================
+// Maaz Bin Tariq Online Quran Academy — Database Schema
+// PostgreSQL via Prisma ORM (also deployable on Supabase Postgres)
+// ============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ----------------------------------------------------------------------------
+// ENUMS
+// ----------------------------------------------------------------------------
+
+enum Role {
+  admin
+  teacher
+  student
+}
+
+enum StudentStatus {
+  pending
+  active
+  suspended
+}
+
+enum TeacherStatus {
+  pending
+  active
+  suspended
+}
+
+enum EnrollmentStatus {
+  pending
+  active
+  completed
+  cancelled
+}
+
+enum ClassStatus {
+  scheduled
+  completed
+  cancelled
+}
+
+enum AssignmentStatus {
+  submitted
+  reviewed
+}
+
+enum CourseCategory {
+  Tajweed
+  Nazra
+  Qaida
+  Hifz
+  Masnoon_Duaen
+  Namaz
+  Six_Kalmas
+}
+
+// ----------------------------------------------------------------------------
+// 1. USERS — root identity table for all roles
+// ----------------------------------------------------------------------------
+model User {
+  id           String   @id @default(uuid())
+  fullName     String   @map("full_name")
+  email        String   @unique
+  phone        String?
+  passwordHash String   @map("password_hash")
+  role         Role     @default(student)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  student Student?
+  teacher Teacher?
+
+  uploadedResources LibraryResource[] @relation("UploadedByAdmin")
+
+  @@map("users")
+}
+
+// ----------------------------------------------------------------------------
+// 2. STUDENTS — student_id is the human-facing PK e.g. "MBT-1001"
+// ----------------------------------------------------------------------------
+model Student {
+  studentId    String        @id @map("student_id") // e.g. MBT-1001
+  userId       String        @unique @map("user_id")
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  guardianName String?       @map("guardian_name")
+  age          Int?
+  country      String?
+  rollNumber   String?       @unique @map("roll_number") // assigned on approval
+  status       StudentStatus @default(pending)
+  createdAt    DateTime      @default(now()) @map("created_at")
+  updatedAt    DateTime      @updatedAt @map("updated_at")
+
+  enrollments Enrollment[]
+  classes     Class[]
+  results     TestResult[]
+  assignments Assignment[]
+
+  @@map("students")
+}
+
+// ----------------------------------------------------------------------------
+// 3. TEACHERS
+// ----------------------------------------------------------------------------
+model Teacher {
+  teacherId        String   @id @map("teacher_id") // e.g. MBT-T-101
+  userId           String   @unique @map("user_id")
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  qualification    String?
+  assignedSubjects String[]      @map("assigned_subjects")
+  bio              String?
+  experienceYears  Int?          @map("experience_years")
+  status           TeacherStatus @default(pending)
+  createdAt        DateTime      @default(now()) @map("created_at")
+
+  enrollments Enrollment[]
+  classes     Class[]
+
+  @@map("teachers")
+}
+
+// ----------------------------------------------------------------------------
+// 4. COURSES
+// ----------------------------------------------------------------------------
+model Course {
+  id          String         @id @default(uuid())
+  title       String
+  description String?
+  category    CourseCategory
+  createdAt   DateTime       @default(now()) @map("created_at")
+
+  enrollments Enrollment[]
+  classes     Class[]
+  results     TestResult[]
+
+  @@map("courses")
+}
+
+// ----------------------------------------------------------------------------
+// 5. ENROLLMENTS — link table: student <-> course <-> teacher
+// ----------------------------------------------------------------------------
+model Enrollment {
+  id        String           @id @default(uuid())
+  studentId String           @map("student_id")
+  student   Student          @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
+  courseId  String           @map("course_id")
+  course    Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  teacherId String?          @map("teacher_id")
+  teacher   Teacher?         @relation(fields: [teacherId], references: [teacherId], onDelete: SetNull)
+  status    EnrollmentStatus @default(pending)
+  createdAt DateTime         @default(now()) @map("created_at")
+
+  @@unique([studentId, courseId])
+  @@map("enrollments")
+}
+
+// ----------------------------------------------------------------------------
+// 6. CLASSES — live class sessions with meeting links
+// ----------------------------------------------------------------------------
+model Class {
+  id           String      @id @default(uuid())
+  classTitle   String      @map("class_title")
+  courseId     String      @map("course_id")
+  course       Course      @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  teacherId    String      @map("teacher_id")
+  teacher      Teacher     @relation(fields: [teacherId], references: [teacherId], onDelete: Cascade)
+  studentId    String      @map("student_id")
+  student      Student     @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
+  meetingLink  String      @map("meeting_link")
+  scheduledAt  DateTime    @map("scheduled_at")
+  status       ClassStatus @default(scheduled)
+  createdAt    DateTime    @default(now()) @map("created_at")
+
+  @@index([studentId])
+  @@index([teacherId])
+  @@map("classes")
+}
+
+// ----------------------------------------------------------------------------
+// 7. TESTS & RESULTS — queried strictly by the student's own roll number
+// ----------------------------------------------------------------------------
+model TestResult {
+  id            String   @id @default(uuid())
+  testTitle     String   @map("test_title")
+  studentId     String   @map("student_id")
+  student       Student  @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
+  courseId      String   @map("course_id")
+  course        Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  rollNumber    String   @map("roll_number")
+  marksObtained Int      @map("marks_obtained")
+  totalMarks    Int      @map("total_marks")
+  feedback      String?
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@index([rollNumber])
+  @@map("tests_and_results")
+}
+
+// ----------------------------------------------------------------------------
+// 8. ASSIGNMENTS
+// ----------------------------------------------------------------------------
+model Assignment {
+  id              String            @id @default(uuid())
+  studentId       String            @map("student_id")
+  student         Student           @relation(fields: [studentId], references: [studentId], onDelete: Cascade)
+  title           String
+  fileUrl         String?           @map("file_url")
+  submissionText  String?           @map("submission_text")
+  status          AssignmentStatus  @default(submitted)
+  teacherFeedback String?           @map("teacher_feedback")
+  createdAt       DateTime          @default(now()) @map("created_at")
+
+  @@map("assignments")
+}
+
+// ----------------------------------------------------------------------------
+// 9. LIBRARY RESOURCES — PDFs / audio uploaded by admins
+// ----------------------------------------------------------------------------
+model LibraryResource {
+  id               String   @id @default(uuid())
+  title            String
+  category         String
+  fileUrl          String   @map("file_url")
+  uploadedByAdmin  String   @map("uploaded_by_admin")
+  uploader         User     @relation("UploadedByAdmin", fields: [uploadedByAdmin], references: [id], onDelete: Cascade)
+  createdAt        DateTime @default(now()) @map("created_at")
+
+  @@map("library_resources")
+}

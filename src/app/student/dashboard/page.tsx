@@ -1,5 +1,7 @@
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+export const dynamic = "force-dynamic";
+ "force-dynamic";
 
 export default async function StudentDashboard() {
   const session = await getSession();
@@ -81,3 +83,5 @@ function EmptyState({ message }: { message: string }) {
     </div>
   );
 }
+
+

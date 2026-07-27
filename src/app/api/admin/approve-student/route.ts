@@ -2,8 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { generateRollNumber, generateStudentId, getSession, requireRole } from "@/lib/auth";
-
 export const dynamic = "force-dynamic";
+ "force-dynamic";
+
 
 const schema = z.object({
   pendingStudentId: z.string(), // the placeholder id e.g. "PENDING-1732500000000"
@@ -64,3 +65,4 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Approval failed." }, { status: 500 });
   }
 }
+

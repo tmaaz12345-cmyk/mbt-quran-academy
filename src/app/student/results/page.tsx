@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+export const dynamic = "force-dynamic";
+ "force-dynamic";
 
 interface Result {
   id: string;
@@ -86,3 +88,4 @@ export default function StudentResultsPage() {
     </div>
   );
 }
+

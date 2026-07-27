@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server";
-export const dynamic = "force-dynamic";
 import { getSession } from "@/lib/auth";
+export const dynamic = "force-dynamic";
+ "force-dynamic";
 
 export async function GET() {
   const session = await getSession();
   if (!session) return NextResponse.json({ user: null }, { status: 200 });
   return NextResponse.json({ user: session });
 }
+
+

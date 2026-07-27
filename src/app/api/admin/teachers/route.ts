@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { generateTeacherId, getSession, hashPassword, requireRole } from "@/lib/auth";
+export const dynamic = "force-dynamic";
+ "force-dynamic";
 
 const schema = z.object({
   fullName: z.string().min(2),
@@ -84,3 +86,5 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Failed to create teacher." }, { status: 500 });
   }
 }
+
+

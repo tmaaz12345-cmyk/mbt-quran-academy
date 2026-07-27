@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSession, requireRole } from "@/lib/auth";
+export const dynamic = "force-dynamic";
+ "force-dynamic";
 
 // GET /api/admin/students?status=pending|active
 export async function GET(req: NextRequest) {
@@ -34,3 +36,5 @@ export async function DELETE(req: NextRequest) {
   await prisma.student.delete({ where: { studentId } }).catch(() => null);
   return NextResponse.json({ message: "Student removed." });
 }
+
+

@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-export const dynamic = "force-dynamic";
 import { prisma } from "@/lib/prisma";
 import { getSession, requireRole } from "@/lib/auth";
+export const dynamic = "force-dynamic";
+ "force-dynamic";
 
 // GET /api/student/result?roll_number=MBT-ROLL-1001
 // Queries results strictly matching the logged-in student's OWN roll number.
@@ -34,3 +35,5 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json({ rollNumber: student.rollNumber, results });
 }
+
+

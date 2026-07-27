@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getSession, requireRole } from "@/lib/auth";
-
+export const dynamic = "force-dynamic";
+ "force-dynamic";
 const schema = z.object({
   title: z.string().min(2),
   category: z.string().min(2), // e.g. "Tajweed", "Qaida Audio", "Dua Booklet"
@@ -39,3 +40,5 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Upload failed." }, { status: 500 });
   }
 }
+
+

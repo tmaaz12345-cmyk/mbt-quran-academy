@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server";
-export const dynamic = "force-dynamic";
 import { prisma } from "@/lib/prisma";
+export const dynamic = "force-dynamic";
+ "force-dynamic";
 
 // GET /api/courses — public course catalog for the homepage
 export async function GET() {
   const courses = await prisma.course.findMany({ orderBy: { createdAt: "asc" } });
   return NextResponse.json({ courses });
 }
+
+

@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+export const dynamic = "force-dynamic";
+ "force-dynamic";
 
 interface StudentProfile {
   studentId: string;
@@ -148,3 +150,4 @@ export default function StudentProfilePage() {
     </div>
   );
 }
+

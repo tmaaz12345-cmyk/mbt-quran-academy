@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getSession, requireRole } from "@/lib/auth";
+export const dynamic = "force-dynamic";
+ "force-dynamic";
 
 const schema = z.object({
   assignmentId: z.string(),
@@ -42,3 +44,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Review failed." }, { status: 500 });
   }
 }
+
+
+

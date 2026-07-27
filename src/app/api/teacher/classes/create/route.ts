@@ -3,7 +3,8 @@ import { z } from "zod";
 import { randomUUID } from "crypto";
 import { prisma } from "@/lib/prisma";
 import { getSession, requireRole } from "@/lib/auth";
-
+export const dynamic = "force-dynamic";
+ "force-dynamic";
 const schema = z.object({
   classTitle: z.string().min(2),
   courseId: z.string(),
@@ -58,3 +59,5 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Failed to create class." }, { status: 500 });
   }
 }
+
+

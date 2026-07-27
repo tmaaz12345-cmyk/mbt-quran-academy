@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+export const dynamic = "force-dynamic";
+ "force-dynamic";
 
 const SUBJECTS = ["Qaida", "Tajweed", "Nazra", "Hifz", "Masnoon Duaen", "Namaz", "6 Kalmas"];
 
@@ -166,3 +168,4 @@ export default function TeacherProfilePage() {
     </div>
   );
 }
+

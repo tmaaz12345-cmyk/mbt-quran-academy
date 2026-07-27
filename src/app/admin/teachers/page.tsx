@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+export const dynamic = "force-dynamic";
+ "force-dynamic";
 
 interface Teacher {
   teacherId: string;
@@ -233,3 +235,4 @@ export default function AdminTeachersPage() {
     </div>
   );
 }
+

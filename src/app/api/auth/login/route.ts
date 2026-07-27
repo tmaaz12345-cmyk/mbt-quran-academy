@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { setSessionCookie, signSession, verifyPassword } from "@/lib/auth";
+export const dynamic = "force-dynamic";
+ "force-dynamic";
 
 const schema = z.object({
   identifier: z.string().min(3), // email OR Student ID (MBT-1001) OR Teacher ID (MBT-T-101)
@@ -91,3 +93,5 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Login failed." }, { status: 500 });
   }
 }
+
+

@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-export const dynamic = "force-dynamic";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { hashPassword } from "@/lib/auth";
+export const dynamic = "force-dynamic";
+ "force-dynamic";
 
 const schema = z.object({
   fullName: z.string().min(2),
@@ -66,3 +67,5 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Registration failed." }, { status: 500 });
   }
 }
+
+

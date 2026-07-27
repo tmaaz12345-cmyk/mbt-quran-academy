@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { getSession, hashPassword, requireRole, verifyPassword } from "@/lib/auth";
+export const dynamic = "force-dynamic";
+ "force-dynamic";
 
 // GET /api/admin/profile — the logged-in admin's own account
 export async function GET() {
@@ -65,3 +67,5 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ error: "Update failed." }, { status: 500 });
   }
 }
+
+

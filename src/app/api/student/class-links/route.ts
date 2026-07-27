@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
-export const dynamic = "force-dynamic";
 import { prisma } from "@/lib/prisma";
 import { getSession, requireRole } from "@/lib/auth";
+export const dynamic = "force-dynamic";
+ "force-dynamic";
 
 // GET /api/student/class-links
 // Returns class links assigned to the logged-in Student ID only.
@@ -21,3 +22,5 @@ export async function GET() {
 
   return NextResponse.json({ classes });
 }
+
+

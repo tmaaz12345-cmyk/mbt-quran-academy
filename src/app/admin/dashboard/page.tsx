@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+export const dynamic = "force-dynamic";
+ "force-dynamic";
 
 interface StudentRow {
   studentId: string;
@@ -221,3 +223,4 @@ export default function AdminDashboardPage() {
     </div>
   );
 }
+

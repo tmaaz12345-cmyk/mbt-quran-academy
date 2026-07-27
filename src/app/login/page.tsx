@@ -1,9 +1,10 @@
 "use client";
-export const dynamic = "force-dynamic";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { LogoMark } from "@/components/Logo";
+export const dynamic = "force-dynamic";
+ "force-dynamic";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -94,3 +95,5 @@ export default function LoginPage() {
     </main>
   );
 }
+
+

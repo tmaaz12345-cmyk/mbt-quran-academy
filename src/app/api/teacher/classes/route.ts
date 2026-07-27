@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getSession, requireRole } from "@/lib/auth";
+export const dynamic = "force-dynamic";
+ "force-dynamic";
 
 // GET /api/teacher/classes — all classes scheduled by the logged-in teacher
 export async function GET() {
@@ -19,3 +21,6 @@ export async function GET() {
 
   return NextResponse.json({ classes });
 }
+
+
+

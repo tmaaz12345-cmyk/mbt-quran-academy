@@ -1,6 +1,8 @@
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
+export const dynamic = "force-dynamic";
+ "force-dynamic";
 
 export default async function TeacherDashboard() {
   const session = await getSession();
@@ -81,3 +83,6 @@ function StatCard({ label, value }: { label: string; value: number }) {
     </div>
   );
 }
+
+
+

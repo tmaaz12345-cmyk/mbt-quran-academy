@@ -2,6 +2,8 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { LogoLockup, LogoMark } from "@/components/Logo";
 import { AdmissionsTabs } from "@/components/AdmissionsTabs";
+export const dynamic = "force-dynamic";
+ "force-dynamic";
 
 const FALLBACK_COURSES = [
   { title: "Noorani Qaida", category: "Qaida", description: "Foundational Arabic letter recognition and pronunciation." },
@@ -152,3 +154,5 @@ export default async function HomePage() {
     </main>
   );
 }
+
+

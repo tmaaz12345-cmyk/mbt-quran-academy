@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+export const dynamic = "force-dynamic";
 import { prisma } from "@/lib/prisma";
 
 // GET /api/courses — public course catalog for the homepage

@@ -74,7 +74,7 @@ function StatCard({ label, value }: { label: string; value: number }) {
   );
 }
 
-export function EmptyState({ message }: { message: string }) {
+function EmptyState({ message }: { message: string }) {
   return (
     <div className="rounded-xl border border-dashed border-emerald-800/20 bg-white/60 p-8 text-center text-sm text-charcoal-soft">
       {message}
